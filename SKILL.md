@@ -3,7 +3,7 @@ name: bili-video-to-feishu
 description: "当用户发来 B 站（bilibili.com/video/BV... 或裸 BV 号）链接，并要求「整理 / 总结 / 提取要点 / 做笔记 / 做成文档 / 生成飞书文档」时使用。完整覆盖：抓取 B 站音视频流 → 语音转写为文字稿 → 提炼要点整理成文 → 生成飞书云文档 → 分享给用户并推送链接。也适用于把任意已有的视频/音频文件走同一套「转写 + 生成飞书文档」流程的场景。"
 metadata:
   category: media-to-document
-  version: 1.0.0
+  version: 1.1.0
   license: MIT
 ---
 
@@ -134,7 +134,17 @@ mcp__lark__im_v1_message_create
 
 ## MCP 工具不可用时
 
-若 `mcp__lark__*` 没出现在工具列表里（宿主没重启 / MCP 没加载），可以临时写一个小脚本直接调飞书 REST API，但**别把 App Secret 写进脚本** —— 从环境变量或凭据文件读。
+若 `mcp__lark__*` 没出现在工具列表里（宿主没重启 / MCP 没加载），用随附的兜底通道 —— 它直接用 stdio 驱动 `@larksuiteoapi/lark-mcp`：
+
+```bash
+node "<skill 目录>/scripts/lark-call.mjs" list
+node "<skill 目录>/scripts/lark-call.mjs" schema <tool>
+node "<skill 目录>/scripts/lark-call.mjs" call <tool> '<json>'
+```
+
+凭据不硬编码：App ID 读 `~/.dsh/integrations/dsh-feishu/config.json` 的 `appId`，App Secret 按同文件的 `secretRef` 去 `~/.dsh/.credentials.yaml` 取。三者都可用环境变量覆盖（`LARK_APP_ID` / `LARK_APP_SECRET` / `DSH_CREDENTIALS_FILE`），lark-mcp 的 CLI 路径用 `LARK_MCP_CLI`。
+
+没有这套环境时，也可以临时写个小脚本直接调飞书 REST API —— 但**别把 App Secret 写进脚本**，从环境变量或凭据文件读。
 
 ## 已知坑（都踩过，别重复）
 
