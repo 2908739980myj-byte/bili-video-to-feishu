@@ -50,7 +50,10 @@ const CLI =
 function readBotConfig() {
   if (!existsSync(BOT_CONFIG)) return {};
   try {
-    return JSON.parse(readFileSync(BOT_CONFIG, 'utf8'));
+    const j = JSON.parse(readFileSync(BOT_CONFIG, 'utf8'));
+    // 实际结构是 { version, bots: [ { appId, secretRef, ... } ] }；也兼容扁平写法
+    const bot = Array.isArray(j.bots) ? j.bots.find((b) => b && b.appId) : null;
+    return bot ? { ...j, ...bot } : j;
   } catch {
     return {};
   }
