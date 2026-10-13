@@ -1,0 +1,19 @@
+# 下载产物
+downloads/
+*.audio.m4s
+*.video.m4s
+*.mp4
+*.wav
+
+# 转写产物
+*.文字稿.md
+
+# 凭据（万一被放进来）
+.credentials.yaml
+.env
+.env.*
+
+# 系统
+Thumbs.db
+desktop.ini
+.DS_Store
