@@ -1,0 +1,7 @@
+# 统一换行符，避免 Windows 上 checkout 出 CRLF。
+# 这两个脚本是给 Node 用的，平台无关，LF 更干净。
+* text=auto
+*.mjs  text eol=lf
+*.md   text eol=lf
+*.json text eol=lf
+*.yml  text eol=lf
